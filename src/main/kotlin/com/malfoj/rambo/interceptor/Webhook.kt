@@ -1,0 +1,55 @@
+package com.malfoj.rambo.interceptor
+
+import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpStatus
+import org.springframework.scheduling.annotation.EnableScheduling
+import org.springframework.scheduling.annotation.Scheduled
+import org.springframework.stereotype.Component
+import org.springframework.web.bind.annotation.*
+import java.time.Instant
+
+@RestController
+@RequestMapping("/hook")
+private class Webhook(val datasource: Datasource) {
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{service}")
+    private fun getEntries(@PathVariable service: String): List<EntryData>? {
+        return datasource.collection[service]?.reversed()
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("/{service}")
+    private fun postEndpoint(@PathVariable service: String, @RequestHeader headers: Map<String, String>, @RequestBody body: Map<Any, Any>): RamboResponse {
+
+        if (datasource.collection[service] == null) {
+            datasource.collection[service] = mutableListOf()
+        }
+        datasource.collection[service]!!.add(
+                EntryData(timestamp = Instant.now(), headers = headers, body = body)
+        )
+        return RamboDefaultResponse()
+    }
+}
+
+@Component
+private class Datasource {
+
+    val collection: MutableMap<String, MutableList<EntryData>> = mutableMapOf()
+
+    @Scheduled(cron = "0 0 6 * * *")
+    fun clearCollection() {
+        collection.clear()
+    }
+}
+
+private interface RamboResponse
+
+private data class RamboDefaultResponse(val name: String = "Rambo", val greeting: String = "Hello traveler!") :
+        RamboResponse
+
+private data class EntryData(val timestamp: Instant, val headers: Map<String, String>, val body: Map<Any, Any>)
+
+@Configuration
+@EnableScheduling
+private class SchedulerConfig

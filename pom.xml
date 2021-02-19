@@ -21,6 +21,7 @@
 	</scm>
 
 	<properties>
+		<infobip-dependencies.version>2.12.11</infobip-dependencies.version>
 
 		<!-- PLUGIN VERSIONS -->
 		<maven-assembly-plugin.version>3.1.0</maven-assembly-plugin.version>
@@ -35,25 +36,36 @@
 		<maven.javadoc.skip>true</maven.javadoc.skip>
 	</properties>
 
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.infobip</groupId>
+				<artifactId>infobip-dependencies</artifactId>
+				<version>${infobip-dependencies.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
-			<version>2.4.3</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-webflux</artifactId>
-			<version>2.4.3</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jetbrains.kotlin</groupId>
 			<artifactId>kotlin-reflect</artifactId>
+			<version>${kotlin.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jetbrains.kotlin</groupId>
 			<artifactId>kotlin-stdlib-jdk8</artifactId>
+			<version>${kotlin.version}</version>
 		</dependency>
 
 		<dependency>

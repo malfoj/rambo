@@ -11,7 +11,7 @@ import java.time.Instant
 
 @RestController
 @RequestMapping("/hook")
-private class Webhook(val datasource: Datasource) {
+class Webhook(val datasource: Datasource) {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{service}")
@@ -34,7 +34,7 @@ private class Webhook(val datasource: Datasource) {
 }
 
 @Component
-private class Datasource {
+class Datasource {
 
     val collection: MutableMap<String, MutableList<EntryData>> = mutableMapOf()
 
@@ -49,7 +49,7 @@ private interface RamboResponse
 private data class RamboDefaultResponse(val name: String = "Rambo", val greeting: String = "Hello traveler!") :
         RamboResponse
 
-private data class EntryData(val timestamp: Instant, val headers: Map<String, String>, val body: Any)
+data class EntryData(val timestamp: Instant, val headers: Map<String, String>, val body: Any)
 
 @Configuration
 @EnableScheduling

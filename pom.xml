@@ -15,7 +15,7 @@
 
 	<scm>
 		<developerConnection>
-			scm:git:ssh://git@git.ib-ci.com:7999/vbot/infobip-viber-bot-gateway.git
+			scm:git:ssh://git@git.ib-ci.com:7999/mal/rambo.git
 		</developerConnection>
 		<tag>HEAD</tag>
 	</scm>

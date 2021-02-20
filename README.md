@@ -1,1 +1,1 @@
-[![](https://jitpack.io/v/malfoj/rambo.svg)](https://jitpack.io/#malfoj/rambo
+

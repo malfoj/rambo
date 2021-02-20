@@ -21,6 +21,20 @@
 		<tag>HEAD</tag>
 	</scm>
 
+	<dependencyManagement>
+		<dependencies>
+			<!-- AWS START-->
+			<dependency>
+				<groupId>software.amazon.awssdk</groupId>
+				<artifactId>bom</artifactId>
+				<version>2.15.15</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<!-- AWS END-->
+		</dependencies>
+	</dependencyManagement>
+
 	<properties>
 
 		<!-- PLUGIN VERSIONS -->
@@ -38,6 +52,12 @@
 
 
 	<dependencies>
+		<!-- AWS START-->
+		<dependency>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>s3</artifactId>
+		</dependency>
+		<!-- AWS END-->
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -106,6 +126,15 @@
 						<version>${kotlin.version}</version>
 					</dependency>
 				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.1</version>
+				<configuration>
+					<source>15</source>
+					<target>15</target>
+				</configuration>
 			</plugin>
 		</plugins>
 

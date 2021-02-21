@@ -1,6 +1,6 @@
 package com.malfoj.rambo.interceptor
 
-interface RamboResponse
+internal interface RamboResponse
 
 internal data class RamboDefaultResponse(val name: String = "Rambo", val greeting: String = "Hello traveler!") :
         RamboResponse

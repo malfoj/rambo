@@ -1,8 +1,175 @@
 <html>
 	<head>
-		<title>Hello Rambo</title>
+		<title>Hello Rambo</title><!-- CSS only -->
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+		<style>
+			.hidden {
+				display : none;
+			}
+
+			.byMalfoj {
+				font-size : 9px;
+			}
+
+			pre {
+				padding       : 10px;
+				border        : 1px #ccc solid;
+				border-radius : 5px;
+				background    : #fff9e4;
+			}
+
+			.jsonWrapper {
+				padding : 10px;
+			}
+
+			.list-group-item {
+				background : #f2f2f2;
+			}
+
+			.jsonTitle {
+				width         : 100px;
+				background    : #2b7d86;
+				padding       : 10px;
+				border        : 1px #ccc solid;
+				border-radius : 5px;
+				cursor        : pointer;
+				font-weight   : 700;
+				color         : #fff;
+			}
+		</style>
+
 	</head>
 	<body>
-		Hello
+		<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
+			<h5 class="my-0 mr-md-auto font-weight-normal">eRambo.pl
+				<span class="byMalfoj">by Malfoj</span>
+			</h5>
+		</div>
+		<div class="container">
+			<div id="list"></div>
+		</div>
+		<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+		<script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+		<script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+		<script type="text/babel">
+
+			class LogsList extends React.Component {
+				constructor(props) {
+					super(props);
+					this.state = {
+						error: null,
+						isLoaded: false,
+						items: []
+					};
+				}
+
+				fetchData() {
+					fetch('/hook/' + window.location.pathname.replace('/ui/', ''))
+						.then(res => res.json())
+						.then(
+							(result) => {
+								this.setState({
+									isLoaded: true,
+									items: result
+								});
+							},
+							(error) => {
+								this.setState({
+									isLoaded: true,
+									error
+								});
+							}
+						)
+				}
+
+				componentDidMount() {
+					if (window.location.pathname.length < 5 || !window.location.pathname.startsWith('/ui/') || window.location.pathname == '/') {
+						this.setState({
+							isLoaded: true,
+							items: []
+						})
+						return;
+					}
+					this.fetchData();
+					setInterval(() => {
+						this.fetchData();
+					}, 5000);
+				}
+
+				render() {
+					const {error, isLoaded, items} = this.state;
+					if (error) {
+						return <div>Błąd: {error.message}</div>;
+					} else if (!isLoaded) {
+						return <div m-state="isLoading"></div>;
+					} else {
+						return (
+							<ul className="list-group">
+								{items.map(item => (
+									<li className="list-group-item" key={item.timestamp}>
+										<Card active={false} timestamp={item.timestamp} headers={item.headers} body={item.body} response={item.response}/>
+									</li>
+								))}
+							</ul>
+						);
+					}
+				}
+			}
+
+			class Card extends React.Component {
+				constructor(props) {
+					super(props);
+					this.state = {
+						active: this.props.active
+					};
+				}
+
+				render() {
+
+					return (
+						<div className={'row'}>
+							<div className={'requestTime'} onClick={() => this.setState({active: !this.state.active})}>{this.props.timestamp}</div>
+							<div className={'col-6'}>
+								<div className={this.state.active ? '' : 'hidden'}>
+									<h3>Request:</h3>
+									<OpenableJson source={this.props.headers} name={'Headers'} active={false}/>
+									<OpenableJson source={this.props.body} name={'Body'} active={true}/>
+								</div>
+							</div>
+							<div className={'col-6'}>
+								<div className={this.state.active ? '' : 'hidden'}>
+									<h3>Response:</h3>
+									<OpenableJson source={this.props.response} name={'Response'} active={true}/>
+								</div>
+							</div>
+						</div>
+					);
+				}
+			}
+
+
+			class OpenableJson extends React.Component {
+				constructor(props) {
+					super(props);
+					this.state = {
+						active: this.props.active
+					};
+				}
+
+				render() {
+
+					return (
+						<div className={'jsonWrapper'}>
+							<div className={'jsonTitle'} onClick={() => this.setState({active: !this.state.active})}>{this.props.name}</div>
+							<pre className={this.state.active ? '' : 'hidden'}>{JSON.stringify(this.props.source, null, 4)}</pre>
+						</div>
+					);
+				}
+			}
+
+			ReactDOM.render(
+				<LogsList/>
+				, document.getElementById('list'));
+		</script>
 	</body>
 </html>

@@ -28,11 +28,15 @@ class Webhook(val datasource: Datasource) {
         if (datasource.collection[service] == null) {
             datasource.collection[service] = mutableListOf()
         }
-
+        val entryData =
+                EntryData(timestamp = Instant.now(),
+                          headers = headers,
+                          body = getBodyOrEmptyString(body),
+                          RamboDefaultResponse())
         datasource.collection[service]!!.add(
-                EntryData(timestamp = Instant.now(), headers = headers, body = getBodyOrEmptyString(body))
+                entryData
         )
-        return Mono.just(RamboDefaultResponse())
+        return Mono.just(entryData.response)
     }
 
     private fun getBodyOrEmptyString(body: Any?): Any {
@@ -54,12 +58,15 @@ class Datasource {
     }
 }
 
-private interface RamboResponse
+interface RamboResponse
 
 private data class RamboDefaultResponse(val name: String = "Rambo", val greeting: String = "Hello traveler!") :
         RamboResponse
 
-data class EntryData(val timestamp: Instant, val headers: Map<String, String>, val body: Any?)
+data class EntryData(val timestamp: Instant,
+                     val headers: Map<String, String>,
+                     val body: Any?,
+                     val response: RamboResponse)
 
 @Configuration
 @EnableScheduling

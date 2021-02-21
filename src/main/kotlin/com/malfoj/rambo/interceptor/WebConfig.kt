@@ -1,17 +1,14 @@
-package com.malfoj.rambo.interceptor;
+package com.malfoj.rambo.interceptor
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.*;
+import org.springframework.context.annotation.Configuration
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry
 
 @Configuration
-public class WebConfig implements WebMvcConfigurer {
-    /**
-     * Ensure client-side paths redirect to index.html because client handles routing. NOTE: Do NOT use @EnableWebMvc or it will break this.
-     */
-    @Override
-    public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/ui/**/{y:[\\w\\-]+}")
-                .setViewName("forward:/index.html");
-    }
+class WebConfig : WebMvcConfigurer {
 
+    override fun addViewControllers(registry: ViewControllerRegistry) {
+        registry.addViewController("/ui/**/{y:[\\w\\-]+}")
+                .setViewName("forward:/index.html")
+    }
 }

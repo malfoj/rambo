@@ -63,14 +63,7 @@
 					};
 				}
 
-				componentDidMount() {
-					if (window.location.pathname.length < 5 || !window.location.pathname.startsWith('/ui/') || window.location.pathname == '/') {
-						this.setState({
-							isLoaded: true,
-							items: []
-						})
-						return;
-					}
+				fetchData() {
 					fetch('/hook/' + window.location.pathname.replace('/ui/', ''))
 						.then(res => res.json())
 						.then(
@@ -89,6 +82,20 @@
 						)
 				}
 
+				componentDidMount() {
+					if (window.location.pathname.length < 5 || !window.location.pathname.startsWith('/ui/') || window.location.pathname == '/') {
+						this.setState({
+							isLoaded: true,
+							items: []
+						})
+						return;
+					}
+					this.fetchData();
+					setInterval(() => {
+						this.fetchData();
+					}, 5000);
+				}
+
 				render() {
 					const {error, isLoaded, items} = this.state;
 					if (error) {
@@ -100,13 +107,43 @@
 							<ul className="list-group">
 								{items.map(item => (
 									<li className="list-group-item" key={item.timestamp}>
-										<OpenableJson source={item.headers} name={'Headers'} active={false}/>
-										<OpenableJson source={item.body} name={'Body'} active={true}/>
+										<Card active={false} timestamp={item.timestamp} headers={item.headers} body={item.body} response={item.response}/>
 									</li>
 								))}
 							</ul>
 						);
 					}
+				}
+			}
+
+			class Card extends React.Component {
+				constructor(props) {
+					super(props);
+					this.state = {
+						active: this.props.active
+					};
+				}
+
+				render() {
+
+					return (
+						<div className={'row'}>
+							<div className={'requestTime'} onClick={() => this.setState({active: !this.state.active})}>{this.props.timestamp}</div>
+							<div className={'col-6'}>
+								<div className={this.state.active ? '' : 'hidden'}>
+									<h3>Request:</h3>
+									<OpenableJson source={this.props.headers} name={'Headers'} active={false}/>
+									<OpenableJson source={this.props.body} name={'Body'} active={true}/>
+								</div>
+							</div>
+							<div className={'col-6'}>
+								<div className={this.state.active ? '' : 'hidden'}>
+									<h3>Response:</h3>
+									<OpenableJson source={this.props.response} name={'Response'} active={true}/>
+								</div>
+							</div>
+						</div>
+					);
 				}
 			}
 

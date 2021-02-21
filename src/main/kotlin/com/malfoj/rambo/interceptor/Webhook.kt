@@ -21,15 +21,25 @@ class Webhook(val datasource: Datasource) {
 
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/{service}")
-    private fun postEndpoint(@PathVariable service: String, @RequestHeader headers: Map<String, String>, @RequestBody body: Any): Mono<RamboResponse> {
+    private fun postEndpoint(@PathVariable service: String,
+                             @RequestHeader headers: Map<String, String>,
+                             @RequestBody(required = false) body: Any): Mono<RamboResponse> {
 
         if (datasource.collection[service] == null) {
             datasource.collection[service] = mutableListOf()
         }
+
         datasource.collection[service]!!.add(
-                EntryData(timestamp = Instant.now(), headers = headers, body = body)
+                EntryData(timestamp = Instant.now(), headers = headers, body = getBodyOrEmptyString(body))
         )
         return Mono.just(RamboDefaultResponse())
+    }
+
+    private fun getBodyOrEmptyString(body: Any?): Any {
+        if (body == null) {
+            return ""
+        }
+        return body
     }
 }
 
@@ -38,7 +48,7 @@ class Datasource {
 
     val collection: MutableMap<String, MutableList<EntryData>> = mutableMapOf()
 
-    @Scheduled(cron = "0 0 6 * * *")
+    @Scheduled(cron = "0 0 6 * * *", zone = "GMT+1")
     fun clearCollection() {
         collection.clear()
     }
@@ -49,7 +59,7 @@ private interface RamboResponse
 private data class RamboDefaultResponse(val name: String = "Rambo", val greeting: String = "Hello traveler!") :
         RamboResponse
 
-data class EntryData(val timestamp: Instant, val headers: Map<String, String>, val body: Any)
+data class EntryData(val timestamp: Instant, val headers: Map<String, String>, val body: Any?)
 
 @Configuration
 @EnableScheduling

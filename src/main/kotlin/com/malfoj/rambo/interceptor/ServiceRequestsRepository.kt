@@ -7,15 +7,15 @@ import org.springframework.scheduling.annotation.Scheduled
 import java.time.Instant
 
 @Configuration
-private class RepositoryConfiguration {
+internal class RepositoryConfiguration {
 
     @Bean
-    fun getRequestRepository(): RequestRepository {
+    internal fun getRequestRepository(): RequestRepository {
         return ServiceRequestsRepository()
     }
 
     @Bean
-    fun getResponsesRepository(): ResponsesRepository {
+    internal fun getResponsesRepository(): ResponsesRepository {
         return ServiceResponsesRepository()
     }
 }
@@ -34,7 +34,7 @@ internal interface ResponsesRepository {
     fun get(service: String): RamboResponse?
 }
 
-private class ServiceRequestsRepository : RequestRepository {
+internal class ServiceRequestsRepository : RequestRepository {
 
     private val collection: MutableMap<String, MutableList<EntryData>> = mutableMapOf()
 
@@ -60,7 +60,7 @@ private class ServiceRequestsRepository : RequestRepository {
     }
 }
 
-private class ServiceResponsesRepository : ResponsesRepository {
+internal class ServiceResponsesRepository : ResponsesRepository {
 
     private val collection: MutableMap<String, RamboResponse> = mutableMapOf()
 

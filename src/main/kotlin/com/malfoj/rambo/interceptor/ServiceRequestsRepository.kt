@@ -29,9 +29,9 @@ internal interface RequestRepository {
 
 internal interface ResponsesRepository {
 
-    fun add(service: String, response: RamboResponse)
+    fun add(service: String, response: String)
 
-    fun get(service: String): RamboResponse?
+    fun get(service: String): String?
 }
 
 internal class ServiceRequestsRepository : RequestRepository {
@@ -62,13 +62,13 @@ internal class ServiceRequestsRepository : RequestRepository {
 
 internal class ServiceResponsesRepository : ResponsesRepository {
 
-    private val collection: MutableMap<String, RamboResponse> = mutableMapOf()
+    private val collection: MutableMap<String, String> = mutableMapOf()
 
-    override fun add(service: String, response: RamboResponse) {
+    override fun add(service: String, response: String) {
         this.collection[service] = response
     }
 
-    override fun get(service: String): RamboResponse? {
+    override fun get(service: String): String? {
         return this.collection[service]
     }
 
@@ -81,7 +81,7 @@ internal class ServiceResponsesRepository : ResponsesRepository {
 internal data class EntryData(val timestamp: Instant,
                               val headers: Map<String, String>,
                               val body: Any?,
-                              val response: RamboResponse)
+                              val response: String)
 
 @Configuration
 @EnableScheduling

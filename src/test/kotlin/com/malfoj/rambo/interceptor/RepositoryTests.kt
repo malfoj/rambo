@@ -22,7 +22,12 @@ class RepositoryTests {
         val givenEntryData = EntryData(timestamp = givenTimestamp,
                                        headers = mapOf(),
                                        body = null,
-                                       response = RamboDefaultResponse())
+                                       response = """
+            { 
+                "name": "John",
+                "surname": "Rambo"
+            }
+            """)
 
         // when
         givenRepository.add(givenService, givenEntryData)
@@ -31,11 +36,16 @@ class RepositoryTests {
         var responses = givenRepository.getAll(givenService)
         responses.let {
             it.size shouldBe 1
-            it.get(0).apply {
+            it[0].apply {
                 timestamp shouldBe givenTimestamp
                 headers shouldBe mapOf()
                 body shouldBe null
-                response shouldBe RamboDefaultResponse()
+                response shouldBe """
+            { 
+                "name": "John",
+                "surname": "Rambo"
+            }
+            """
             }
         }
     }
@@ -48,7 +58,12 @@ class RepositoryTests {
         val givenEntryData = EntryData(timestamp = givenTimestamp,
                                        headers = mapOf(),
                                        body = null,
-                                       response = RamboDefaultResponse())
+                                       response = """
+            { 
+                "name": "John",
+                "surname": "Rambo"
+            }
+            """)
 
         // when
         for(i in 1..403) {

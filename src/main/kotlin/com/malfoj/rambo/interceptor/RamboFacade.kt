@@ -12,10 +12,15 @@ internal class RamboFacade(private val requestsRepository: RequestRepository,
         return Mono.just(requestsRepository.getAll(service).reversed())
     }
 
-    internal fun saveRequest(service: String, headers: Map<String, String>, body: Any?): Mono<RamboResponse> {
-        var response = RamboDefaultResponse() as RamboResponse
+    internal fun saveRequest(service: String, headers: Map<String, String>, body: Any?): Mono<String> {
+        var response = """
+            { 
+                "name": "John",
+                "surname": "Rambo"
+            }
+            """
 
-        if (responsesRepository.get(service) is RamboResponse) {
+        if (responsesRepository.get(service) is String) {
             response = responsesRepository.get(service)!!
         }
 
@@ -30,9 +35,8 @@ internal class RamboFacade(private val requestsRepository: RequestRepository,
         return Mono.just(entryData.response)
     }
 
-    internal fun setupCustomResponse(service: String, body: Any): Mono<RamboResponse> {
-        val ramboCustomResponse = RamboCustomResponse(body)
-        responsesRepository.add(service, ramboCustomResponse)
+    internal fun setupCustomResponse(service: String, body: String): Mono<String> {
+        responsesRepository.add(service, body)
         return Mono.just(responsesRepository.get(service)!!)
     }
 

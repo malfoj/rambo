@@ -12,28 +12,7 @@
 
 	<groupId>com.malfoj</groupId>
 	<artifactId>rambo</artifactId>
-	<version>1.5.0-SNAPSHOT</version>
-
-	<scm>
-		<developerConnection>
-			scm:git:ssh://git@git.ib-ci.com:7999/mal/rambo.git
-		</developerConnection>
-		<tag>HEAD</tag>
-	</scm>
-
-	<dependencyManagement>
-		<dependencies>
-			<!-- AWS START-->
-			<dependency>
-				<groupId>software.amazon.awssdk</groupId>
-				<artifactId>bom</artifactId>
-				<version>2.15.15</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-			<!-- AWS END-->
-		</dependencies>
-	</dependencyManagement>
+	<version>1.5.1</version>
 
 	<properties>
 
@@ -52,14 +31,6 @@
 
 
 	<dependencies>
-		<!-- AWS START-->
-		<dependency>
-			<groupId>software.amazon.awssdk</groupId>
-			<artifactId>s3</artifactId>
-		</dependency>
-		<!-- AWS END-->
-		<!-- WEBSOCET START-->
-		<!-- RSOCKET END-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>

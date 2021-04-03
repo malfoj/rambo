@@ -4,6 +4,8 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.scheduling.annotation.Scheduled
+import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
 import java.time.Instant
 
 @Configuration
@@ -24,7 +26,7 @@ internal interface RequestRepository {
 
     fun add(service: String, entryData: EntryData)
 
-    fun getAll(service: String): MutableList<EntryData>
+    fun getAll(service: String): Flux<EntryData>
 }
 
 internal interface ResponsesRepository {
@@ -36,21 +38,21 @@ internal interface ResponsesRepository {
 
 internal class ServiceRequestsRepository : RequestRepository {
 
-    private val collection: MutableMap<String, MutableList<EntryData>> = mutableMapOf()
+    private val collection: MutableMap<String, Flux<EntryData>> = mutableMapOf()
 
     override fun add(service: String, entryData: EntryData) {
         ensureCollectionIsInitated(service)
-        this.collection[service]!!.add(entryData)
+        this.collection[service] = Flux.merge(Mono.just(entryData), this.collection[service]!!)
     }
 
-    override fun getAll(service: String): MutableList<EntryData> {
+    override fun getAll(service: String): Flux<EntryData> {
         ensureCollectionIsInitated(service)
         return this.collection[service]!!
     }
 
     private fun ensureCollectionIsInitated(service: String) {
         if (this.collection[service] == null) {
-            this.collection[service] = mutableListOf()
+            this.collection[service] = Flux.empty()
         }
     }
 

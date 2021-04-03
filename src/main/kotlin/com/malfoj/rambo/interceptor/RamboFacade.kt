@@ -1,6 +1,7 @@
 package com.malfoj.rambo.interceptor
 
 import org.springframework.stereotype.Component
+import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import java.time.Instant
 
@@ -8,8 +9,8 @@ import java.time.Instant
 internal class RamboFacade(private val requestsRepository: RequestRepository,
                            private val responsesRepository: ResponsesRepository) {
 
-    internal fun getAllRequests(service: String): Mono<List<EntryData>> {
-        return Mono.just(requestsRepository.getAll(service).reversed())
+    internal fun getAllRequests(service: String): Flux<EntryData> {
+        return requestsRepository.getAll(service).log()
     }
 
     internal fun saveRequest(service: String, headers: Map<String, String>, body: Any?): Mono<String> {

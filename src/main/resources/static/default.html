@@ -3,7 +3,6 @@
 		<title>Hello Rambo</title><!-- CSS only -->
 		<link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" rel="stylesheet">
 
-
 	</head>
 	<body>
 		<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
@@ -11,6 +10,18 @@
 				<span class="byMalfoj">by Malfoj</span>
 			</h5>
 		</div>
-		siemasz
+		<div class="container">
+			<h1>How it works:</h1>
+
+			<pre>Requests shall be sent over (post, get, put, patch, delete, head, options) https://erambo.pl/hook/#CUSTOMNAME# so for example https://erambo.pl/hook/rambo</pre>
+
+			<pre>To see your requests on specific hook go via browser to https://erambo.pl/ui/#CUSTOMNAME# so for example https://erambo.pl/ui/rambo</pre>
+
+			<pre>To change a hook response use patch method over url: PATCH https://erambo.pl/response/#CUSTOMNAME# so for example https://erambo.pl/response/rambo</pre>
+
+			<pre>To get raw entries u can call endpoint of GET https://erambo.pl/raw/#CUSTOMNAME# so for example https://erambo.pl/raw/rambo</pre>
+
+			<pre>To get your current response on a hook u can call endpoint of GET https://erambo.pl/response/#CUSTOMNAME# so for example https://erambo.pl/raw/rambo</pre>
+		</div>
 	</body>
 </html>

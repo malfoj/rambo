@@ -35,6 +35,10 @@
 				font-weight   : 700;
 				color         : #fff;
 			}
+
+			.pull-right {
+				float : right;
+			}
 		</style>
 
 	</head>
@@ -118,7 +122,7 @@
 								<ul className="list-group">
 									{items.map(item => (
 										<li className="list-group-item" key={item.timestamp}>
-											<Card active={false} timestamp={item.timestamp} headers={item.headers} body={item.body} response={JSON.parse(item.response)}/>
+											<Card active={false} timestamp={item.timestamp} method={item.requestMethod} headers={item.headers} body={item.body} response={JSON.parse(item.response)}/>
 										</li>
 									))}
 								</ul>
@@ -140,7 +144,10 @@
 
 					return (
 						<div className={'row'}>
-							<div className={'requestTime'} onClick={() => this.setState({active: !this.state.active})}>{this.props.timestamp}</div>
+							<div className={'requestTime'} onClick={() => this.setState({active: !this.state.active})}>
+								{this.props.timestamp}
+								<div className={'pull-right'}>Method: <strong>{this.props.method}</strong></div>
+							</div>
 							<div className={'col-6'}>
 								<div className={this.state.active ? '' : 'hidden'}>
 									<h3>Request:</h3>

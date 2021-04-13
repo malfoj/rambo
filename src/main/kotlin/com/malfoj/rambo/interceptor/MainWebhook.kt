@@ -7,28 +7,27 @@ import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
 @RestController
-@RequestMapping("/hook",
-                produces = [MediaType.APPLICATION_JSON_VALUE],
+@RequestMapping(produces = [MediaType.APPLICATION_JSON_VALUE],
                 consumes = [MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_XML_VALUE, MediaType.ALL_VALUE])
-private class Webhook(private val ramboFacade: RamboFacade) {
+private class MainWebhook(private val ramboFacade: RamboFacade) {
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/{service}")
+    @GetMapping("/raw/{service}")
     private fun getEntries(@PathVariable service: String): Flux<EntryData> {
-        return ramboFacade.getAllRequests(service)
+        return ramboFacade.getAllRequests(service).sort { o1, o2 ->
+            o2.timestamp.compareTo(o1.timestamp)
+        }
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @PostMapping("/{service}")
-    private fun postEndpoint(@PathVariable service: String,
-                             @RequestHeader headers: Map<String, String>,
-                             @RequestBody(required = false) body: Any): Mono<String> {
-        return ramboFacade.saveRequest(service, headers, body)
+    @GetMapping("/response/{service}")
+    private fun getCurrentResponse(@PathVariable service: String): Mono<String> {
+        return Mono.just(ramboFacade.getCustomResponse(service))
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @PatchMapping("/{service}")
+    @PatchMapping("/response/{service}")
     private fun setCustomResponse(@PathVariable service: String, @RequestBody body: String): Mono<String> {
-        return ramboFacade.setupCustomResponse(service, body)
+        return Mono.just(ramboFacade.setupCustomResponse(service, body))
     }
 }

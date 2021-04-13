@@ -8,6 +8,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 private class WebConfig : WebMvcConfigurer {
 
     override fun addViewControllers(registry: ViewControllerRegistry) {
+        registry.addViewController("/")
+                .setViewName("forward:/default.html")
         registry.addViewController("/ui/**/{y:[\\w\\-]+}")
                 .setViewName("forward:/index.html")
     }

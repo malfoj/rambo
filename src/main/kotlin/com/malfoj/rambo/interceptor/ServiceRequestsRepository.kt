@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.scheduling.annotation.Scheduled
+import org.springframework.web.bind.annotation.RequestMethod
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import java.time.Instant
@@ -42,7 +43,7 @@ internal class ServiceRequestsRepository : RequestRepository {
 
     override fun add(service: String, entryData: EntryData) {
         ensureCollectionIsInitated(service)
-        this.collection[service] = Flux.merge(Mono.just(entryData), this.collection[service]!!)
+        this.collection[service] = this.collection[service]!!.mergeWith(Mono.just(entryData))
     }
 
     override fun getAll(service: String): Flux<EntryData> {
@@ -80,10 +81,11 @@ internal class ServiceResponsesRepository : ResponsesRepository {
     }
 }
 
-internal data class EntryData(val timestamp: Instant,
-                              val headers: Map<String, String>,
-                              val body: Any?,
-                              val response: String)
+data class EntryData(val timestamp: Instant,
+                     val headers: Map<String, String>,
+                     val body: Any?,
+                     val response: String,
+                     val requestMethod: RequestMethod)
 
 @Configuration
 @EnableScheduling

@@ -35,6 +35,8 @@ internal interface ResponsesRepository {
     fun add(service: String, response: String)
 
     fun get(service: String): String?
+
+    fun getAllServices(): List<String>
 }
 
 internal class ServiceRequestsRepository : RequestRepository {
@@ -75,7 +77,11 @@ internal class ServiceResponsesRepository : ResponsesRepository {
         return this.collection[service]
     }
 
-    @Scheduled(cron = "0 0 6 * * *", zone = "GMT+1")
+    override fun getAllServices(): List<String> {
+        return this.collection.keys.toList()
+    }
+
+    //@Scheduled(cron = "0 0 6 * * *", zone = "GMT+1")
     private fun clearCollection() {
         collection.clear()
     }

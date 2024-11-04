@@ -30,6 +30,10 @@ internal class RamboFacade(private val requestsRepository: RequestRepository,
         return Mono.just(entryData.response)
     }
 
+    internal fun getAllResponses(): List<String> {
+        return responsesRepository.getAllServices()
+    }
+
     internal fun setupCustomResponse(service: String, body: String): String {
         responsesRepository.add(service, body)
         return responsesRepository.get(service)!!

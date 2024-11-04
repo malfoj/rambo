@@ -1,27 +1,64 @@
 <html>
-	<head>
-		<title>Hello Rambo</title><!-- CSS only -->
-		<link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" rel="stylesheet">
+<head>
+    <title>Hello Rambo</title><!-- CSS only -->
+    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css"
+          integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" rel="stylesheet">
+    <style>
+        .desco {
+            order-bottom: 1px dashed #ccc;
+            padding: 10px;
+            font-style: italic;
+        }
+        input[type="text"] {
+            padding: 5px;
+            width: 100%;
+            overflow: auto;
+            background: #f0f0f0;
+            border: 1px dotted #ccc;
+        }
+    </style>
+    <script>
+      async function copyText(event) {
+        const inputElement = event.target;
+        try {
+          // Use the Clipboard API to write the input value to the clipboard
+          await navigator.clipboard.writeText(inputElement.value);
+          alert("Text copied to clipboard: " + inputElement.value);
+        } catch (err) {
+          console.error("Failed to copy text: ", err);
+        }
+      }
+    </script>
+</head>
+<body>
+<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
+    <h5 class="my-0 mr-md-auto font-weight-normal">frog02.mikr.us:20756
+        <span class="byMalfoj">by Malfoj</span>
+    </h5>
+</div>
+<div class="container">
+    <h1>How it works:</h1>
 
-	</head>
-	<body>
-		<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
-			<h5 class="my-0 mr-md-auto font-weight-normal">eRambo.pl
-				<span class="byMalfoj">by Malfoj</span>
-			</h5>
-		</div>
-		<div class="container">
-			<h1>How it works:</h1>
+    <div class="desco">Requests shall be sent over (post, get, put, patch, delete, head, options) http://frog02.mikr.us:20756/hook/#CUSTOMNAME# so for example
+        <br /><input type="text" value="curl -X POST http://frog02.mikr.us:20756/hook/rambo" readonly onclick="copyText(event)"/>
+        <br />default response would be returned
+    </div>
 
-			<pre>Requests shall be sent over (post, get, put, patch, delete, head, options) https://erambo.pl/hook/#CUSTOMNAME# so for example https://erambo.pl/hook/rambo</pre>
+    <div class="desco">To see your requests on specific hook go via browser to http://frog02.mikr.us:20756/ui/#CUSTOMNAME# so for example
+        <br />Use broweser and visit: http://frog02.mikr.us:20756/ui/rambo
+    </div>
 
-			<pre>To see your requests on specific hook go via browser to https://erambo.pl/ui/#CUSTOMNAME# so for example https://erambo.pl/ui/rambo</pre>
+    <div class="desco">To change a hook response use patch method over url: PATCH http://frog02.mikr.us:20756/response/#CUSTOMNAME# so for example
+        <br /><input type="text" value="curl -X PATCH -H &quot;Content-Type: application/json&quot; --data &#39;{&quot;message&quot;: &quot;Hello there&quot;}&#39; http://localhost:20756/response/rambo" readonly onclick="copyText(event)"/>
+    </div>
 
-			<pre>To change a hook response use patch method over url: PATCH https://erambo.pl/response/#CUSTOMNAME# so for example https://erambo.pl/response/rambo</pre>
+    <div class="desco">To get raw entries u can call endpoint of GET http://frog02.mikr.us:20756/raw/#CUSTOMNAME# so for example
+        <br /><input type="text" value="curl http://frog02.mikr.us:20756/raw/rambo" readonly onclick="copyText(event)"/>
+    </div>
 
-			<pre>To get raw entries u can call endpoint of GET https://erambo.pl/raw/#CUSTOMNAME# so for example https://erambo.pl/raw/rambo</pre>
-
-			<pre>To get your current response on a hook u can call endpoint of GET https://erambo.pl/response/#CUSTOMNAME# so for example https://erambo.pl/raw/rambo</pre>
-		</div>
-	</body>
+    <div class="desco">To get your current response on a hook u can call endpoint of GET http://frog02.mikr.us:20756/response/#CUSTOMNAME# so for example
+        <br /><input type="text" value="curl http://frog02.mikr.us:20756/response/rambo" readonly onclick="copyText(event)"/>
+    </div>
+</div>
+</body>
 </html>

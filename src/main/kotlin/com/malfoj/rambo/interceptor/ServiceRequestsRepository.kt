@@ -1,12 +1,11 @@
 package com.malfoj.rambo.interceptor
 
+import com.malfoj.rambo.api.EntryDataResponse
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.web.bind.annotation.RequestMethod
-import reactor.core.publisher.Flux
-import reactor.core.publisher.Mono
 import java.time.Instant
 
 @Configuration
@@ -87,11 +86,12 @@ internal class ServiceResponsesRepository : ResponsesRepository {
     }
 }
 
-data class EntryData(val timestamp: Instant,
-                     val headers: Map<String, String>,
-                     val body: Any?,
-                     val response: String,
-                     val requestMethod: RequestMethod)
+internal data class EntryData(val timestamp: Instant,
+                             val headers: Map<String, String>,
+                             val body: Any?,
+                             val response: String,
+                             val requestMethod: RequestMethod
+)
 
 @Configuration
 @EnableScheduling

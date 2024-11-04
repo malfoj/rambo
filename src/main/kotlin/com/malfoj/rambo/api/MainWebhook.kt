@@ -1,5 +1,6 @@
-package com.malfoj.rambo.interceptor
+package com.malfoj.rambo.api
 
+import com.malfoj.rambo.interceptor.RamboFacade
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.GetMapping
@@ -11,8 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.server.ResponseStatusException
-import reactor.core.publisher.Flux
-import reactor.core.publisher.Mono
 
 
 @RestController
@@ -24,10 +23,8 @@ private class MainWebhook(private val ramboFacade: RamboFacade) {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/raw/{service}")
-    private fun getEntries(@PathVariable service: String): List<EntryData> {
-        return ramboFacade.getAllRequests(service).sortedWith { o1, o2 ->
-            o2.timestamp.compareTo(o1.timestamp)
-        }
+    private fun getEntries(@PathVariable service: String): List<EntryDataResponse> {
+        return getAllEntriesMapThemAndSort(service)
     }
 
     @ResponseStatus(HttpStatus.OK)
@@ -50,4 +47,18 @@ private class MainWebhook(private val ramboFacade: RamboFacade) {
         }
         return ramboFacade.getAllResponses()
     }
+
+    private fun getAllEntriesMapThemAndSort(service: String) = ramboFacade.getAllRequests(service)
+        .map {
+            EntryDataResponse(
+                timestamp = it.timestamp,
+                headers = it.headers,
+                body = it.body,
+                response = it.response,
+                requestMethod = it.requestMethod
+            )
+        }
+        .sortedWith { o1, o2 ->
+            o2.timestamp.compareTo(o1.timestamp)
+        }
 }

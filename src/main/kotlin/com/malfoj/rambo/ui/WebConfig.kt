@@ -1,4 +1,4 @@
-package com.malfoj.rambo.interceptor
+package com.malfoj.rambo.ui
 
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry

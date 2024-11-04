@@ -1,8 +1,8 @@
 package com.malfoj.rambo.interceptor
 
+import com.malfoj.rambo.api.EntryDataResponse
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation.RequestMethod
-import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import java.time.Instant
 
@@ -20,7 +20,7 @@ internal class RamboFacade(private val requestsRepository: RequestRepository,
                              requestMethod: RequestMethod): Mono<String> {
 
         val entryData =
-                EntryData(timestamp = Instant.now(),
+            EntryData(timestamp = Instant.now(),
                           headers = headers,
                           body = getBodyOrEmptyString(body),
                           response = getCustomResponse(service),

@@ -1,5 +1,6 @@
-package com.malfoj.rambo.interceptor
+package com.malfoj.rambo.api
 
+import com.malfoj.rambo.interceptor.RamboFacade
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*

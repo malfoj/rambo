@@ -27,7 +27,7 @@ internal interface RequestRepository {
 
     fun add(service: String, entryData: EntryData)
 
-    fun getAll(service: String): Flux<EntryData>
+    fun getAll(service: String): List<EntryData>
 }
 
 internal interface ResponsesRepository {
@@ -41,21 +41,21 @@ internal interface ResponsesRepository {
 
 internal class ServiceRequestsRepository : RequestRepository {
 
-    private val collection: MutableMap<String, Flux<EntryData>> = mutableMapOf()
+    private val collection: MutableMap<String, List<EntryData>> = mutableMapOf()
 
     override fun add(service: String, entryData: EntryData) {
         ensureCollectionIsInitated(service)
-        this.collection[service] = this.collection[service]!!.mergeWith(Mono.just(entryData))
+        this.collection[service] = this.collection[service]!!.plus(entryData)
     }
 
-    override fun getAll(service: String): Flux<EntryData> {
+    override fun getAll(service: String): List<EntryData> {
         ensureCollectionIsInitated(service)
         return this.collection[service]!!
     }
 
     private fun ensureCollectionIsInitated(service: String) {
         if (this.collection[service] == null) {
-            this.collection[service] = Flux.empty()
+            this.collection[service] = ArrayList()
         }
     }
 

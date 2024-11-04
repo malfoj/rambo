@@ -10,7 +10,7 @@ import java.time.Instant
 internal class RamboFacade(private val requestsRepository: RequestRepository,
                            private val responsesRepository: ResponsesRepository) {
 
-    internal fun getAllRequests(service: String): Flux<EntryData> {
+    internal fun getAllRequests(service: String): List<EntryData> {
         return requestsRepository.getAll(service)
     }
 

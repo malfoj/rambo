@@ -1,9 +1,9 @@
-/*
 package com.malfoj.rambo.interceptor
 
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.springframework.web.bind.annotation.RequestMethod
 import java.time.Instant
 
 class RepositoryTests {
@@ -11,7 +11,7 @@ class RepositoryTests {
     private lateinit var givenRepository: RequestRepository
 
     @BeforeEach
-    fun reset(){
+    fun reset() {
         givenRepository = RepositoryConfiguration().getRequestRepository()
     }
 
@@ -20,22 +20,24 @@ class RepositoryTests {
         // given
         val givenService = "service"
         val givenTimestamp = Instant.now()
-        val givenEntryData = EntryData(timestamp = givenTimestamp,
-                                       headers = mapOf(),
-                                       body = null,
-                                       response = """
+        val givenEntryData = EntryData(
+            timestamp = givenTimestamp,
+            headers = mapOf(),
+            body = null,
+            response = """
             { 
                 "name": "John",
                 "surname": "Rambo"
             }
-            """)
+            """,
+            requestMethod = RequestMethod.GET
+        )
 
         // when
         givenRepository.add(givenService, givenEntryData)
 
         // then
-  */
-/*      var responses = givenRepository.getAll(givenService)
+        val responses = givenRepository.getAll(givenService)
         responses.let {
             it.size shouldBe 1
             it[0].apply {
@@ -48,8 +50,9 @@ class RepositoryTests {
                 "surname": "Rambo"
             }
             """
+                requestMethod shouldBe RequestMethod.GET
             }
-        }*//*
+        }
 
     }
 
@@ -58,24 +61,25 @@ class RepositoryTests {
         // given
         val givenService = "service"
         val givenTimestamp = Instant.now()
-        val givenEntryData = EntryData(timestamp = givenTimestamp,
-                                       headers = mapOf(),
-                                       body = null,
-                                       response = """
+        val givenEntryData = EntryData(
+            timestamp = givenTimestamp,
+            headers = mapOf(),
+            body = null,
+            response = """
             { 
                 "name": "John",
                 "surname": "Rambo"
             }
-            """)
+            """,
+            requestMethod = RequestMethod.GET
+        )
 
         // when
-        for(i in 1..403) {
+        for (i in 1..403) {
             givenRepository.add(givenService, givenEntryData)
         }
 
         // then
-        */
-/*givenRepository.getAll(givenService).size shouldBe 403*//*
-
+        givenRepository.getAll(givenService).size shouldBe 403
     }
-}*/
+}
